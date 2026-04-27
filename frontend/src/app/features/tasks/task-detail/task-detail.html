@@ -1,0 +1,49 @@
+<div class="task-detail-container" *ngIf="task$ | async as task; else loading">
+  <button mat-button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Back to Tasks
+  </button>
+
+  <div class="task-header">
+    <div class="title-section">
+      <h1>{{ task.title }}</h1>
+      <mat-chip-set>
+        <mat-chip [class]="task.status">{{ task.status | titlecase }}</mat-chip>
+        <mat-chip [color]="task.priority === 'high' ? 'warn' : (task.priority === 'medium' ? 'accent' : 'primary')" selected>
+          {{ task.priority | titlecase }} Priority
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+    <div class="meta-section">
+      <span class="meta-item"><mat-icon>folder</mat-icon> Project: {{ task.project?.title }}</span>
+      <span class="meta-item" *ngIf="task.due_date"><mat-icon>event</mat-icon> Due: {{ task.due_date | date }}</span>
+    </div>
+  </div>
+
+  <mat-card class="detail-card mat-elevation-z2">
+    <mat-card-content>
+      <h3>Description</h3>
+      <p>{{ task.description || 'No description provided.' }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="assignees-section">
+    <h3>Assignees ({{ task.assignees?.length || 0 }})</h3>
+    <mat-list class="mat-elevation-z2 list-bg">
+      <mat-list-item *ngFor="let user of task.assignees">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <div matListItemTitle>{{ user.name }}</div>
+        <div matListItemLine>{{ user.email }}</div>
+      </mat-list-item>
+      <div class="empty-state" *ngIf="!task.assignees || task.assignees.length === 0">
+        <p>No users assigned to this task.</p>
+      </div>
+    </mat-list>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading-state">
+    <mat-icon class="spinner">sync</mat-icon>
+    <p>Loading task details...</p>
+  </div>
+</ng-template>

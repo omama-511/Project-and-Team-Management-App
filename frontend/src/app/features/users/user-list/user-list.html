@@ -1,0 +1,68 @@
+<div class="user-list-container">
+  <div class="header">
+    <h1>Team Management</h1>
+  </div>
+
+  <ng-container *ngIf="users$ | async as users; else loading">
+    <table mat-table [dataSource]="users" class="mat-elevation-z8 user-table" *ngIf="users.length > 0">
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef> Role </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-chip [color]="element.role === 'admin' ? 'warn' : 'primary'" selected>
+            {{element.role | uppercase}}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <!-- Created At Column -->
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef> Joined </th>
+        <td mat-cell *matCellDef="let element"> {{element.created_at | date}} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container *ngIf="currentUser$ | async as currentUser">
+            <button mat-icon-button 
+                    [color]="element.role === 'admin' ? 'warn' : 'primary'" 
+                    (click)="toggleRole(element)"
+                    [disabled]="currentUser.id === element.id"
+                    [matTooltip]="element.role === 'admin' ? 'Remove Admin Access' : 'Promote to Admin'">
+              <mat-icon>{{ element.role === 'admin' ? 'security_update_warning' : 'verified_user' }}</mat-icon>
+            </button>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <div *ngIf="users.length === 0" class="empty-state">
+      <mat-icon>people_outline</mat-icon>
+      <p>No users found.</p>
+    </div>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading team members...</p>
+    </div>
+  </ng-template>
+</div>

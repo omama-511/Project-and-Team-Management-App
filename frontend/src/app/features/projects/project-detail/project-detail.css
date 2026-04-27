@@ -1,0 +1,131 @@
+.project-detail-container {
+  padding: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  margin-bottom: 16px;
+}
+
+.project-header {
+  margin-bottom: 24px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.title-section h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+}
+
+.meta-section {
+  display: flex;
+  gap: 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.meta-item mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.description-card {
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.description-card h3 {
+  margin-top: 0;
+  color: #555;
+  font-size: 16px;
+}
+
+.description-card p {
+  color: #333;
+  line-height: 1.6;
+}
+
+.tabs-group {
+  border-radius: 8px;
+  background: white;
+}
+
+.tab-content {
+  padding: 16px 0;
+  min-height: 200px;
+}
+
+.tab-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px 16px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  color: #888;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  color: #666;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .title-section h1, .description-card p {
+    color: #f0f0f0;
+  }
+  .description-card h3, .meta-section, .loading-state {
+    color: #aaa;
+  }
+  .tabs-group {
+    background: #1e1e1e;
+  }
+}

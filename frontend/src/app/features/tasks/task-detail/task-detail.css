@@ -1,0 +1,76 @@
+.task-detail-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  margin-bottom: 16px;
+}
+
+.task-header {
+  margin-bottom: 24px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.title-section h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.meta-section {
+  display: flex;
+  gap: 24px;
+  color: #666;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-card {
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.list-bg {
+  background: white;
+  border-radius: 8px;
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: #888;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Status Styles */
+.pending { background-color: #ffe0b2 !important; color: #e65100 !important; }
+.in_progress { background-color: #e3f2fd !important; color: #1565c0 !important; }
+.completed { background-color: #e8f5e9 !important; color: #2e7d32 !important; }

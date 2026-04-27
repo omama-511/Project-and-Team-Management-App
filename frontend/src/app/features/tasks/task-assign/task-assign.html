@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Assign Task</h2>
+<mat-dialog-content>
+  <p>Assigning <strong>{{ data.task.title }}</strong> to a user.</p>
+  <form [formGroup]="assignForm" class="assign-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Select User</mat-label>
+      <mat-select formControlName="user_id">
+        <mat-option *ngFor="let user of users" [value]="user.id">
+          {{ user.name }} ({{ user.email }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="assignForm.invalid" (click)="onSubmit()">Assign</button>
+</mat-dialog-actions>

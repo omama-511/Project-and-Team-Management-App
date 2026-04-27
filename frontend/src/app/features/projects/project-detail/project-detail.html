@@ -1,0 +1,82 @@
+<div class="project-detail-container" *ngIf="project$ | async as project; else loading">
+  <button mat-button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Back to Projects
+  </button>
+
+  <div class="project-header">
+    <div class="title-section">
+      <h1>{{ project.title }}</h1>
+      <mat-chip [color]="project.status === 'active' ? 'primary' : (project.status === 'completed' ? 'accent' : 'warn')">
+        {{ project.status | titlecase }}
+      </mat-chip>
+    </div>
+    <div class="meta-section">
+      <span class="meta-item"><mat-icon>person</mat-icon> Created by: {{ project.creator?.name }}</span>
+      <span class="meta-item"><mat-icon>calendar_today</mat-icon> Created on: {{ project.created_at | date }}</span>
+    </div>
+  </div>
+
+  <mat-card class="description-card mat-elevation-z2">
+    <mat-card-content>
+      <h3>Description</h3>
+      <p>{{ project.description || 'No description provided.' }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-tab-group class="mat-elevation-z2 tabs-group" animationDuration="0ms">
+    <mat-tab label="Tasks ({{ project.tasks?.length || 0 }})">
+      <div class="tab-content">
+        <mat-list *ngIf="project.tasks && project.tasks.length > 0; else noTasks">
+          <mat-list-item *ngFor="let task of project.tasks">
+            <mat-icon matListItemIcon color="primary">check_circle_outline</mat-icon>
+            <div matListItemTitle>{{ task.title }}</div>
+            <div matListItemLine>{{ task.status | titlecase }} - Priority: {{ task.priority || 'None' }}</div>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+        </mat-list>
+        <ng-template #noTasks>
+          <div class="empty-state">
+            <mat-icon>assignment</mat-icon>
+            <p>No tasks yet.</p>
+          </div>
+        </ng-template>
+      </div>
+    </mat-tab>
+    
+    <mat-tab label="Members ({{ project.members?.length || 0 }})">
+      <div class="tab-content">
+        <div class="tab-header" *ngIf="currentUser$ | async as user">
+          <button mat-raised-button color="primary" *ngIf="user.role === 'admin'" (click)="openAddMemberDialog()">
+            <mat-icon>person_add</mat-icon> Add Member
+          </button>
+        </div>
+        <mat-list *ngIf="project.members && project.members.length > 0; else noMembers">
+          <mat-list-item *ngFor="let member of project.members">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>{{ member.name }}</div>
+            <div matListItemLine>{{ member.email }} ({{ member.pivot.role_in_project || 'Member' }})</div>
+            <div matListItemMeta *ngIf="currentUser$ | async as user">
+              <button mat-icon-button color="warn" *ngIf="user.role === 'admin'" (click)="removeMember(member.id)">
+                <mat-icon>person_remove</mat-icon>
+              </button>
+            </div>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+        </mat-list>
+        <ng-template #noMembers>
+          <div class="empty-state">
+            <mat-icon>people</mat-icon>
+            <p>No members added yet.</p>
+          </div>
+        </ng-template>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #loading>
+  <div class="loading-state">
+    <mat-icon class="spinner">sync</mat-icon>
+    <p>Loading project details...</p>
+  </div>
+</ng-template>

@@ -1,0 +1,70 @@
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav #sidenav mode="side" opened class="sidenav elevation-z4">
+    <!-- Admin Links -->
+    <mat-nav-list *ngIf="isAdmin" class="nav-list">
+      <a mat-list-item routerLink="/projects" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <div matListItemTitle>Projects</div>
+      </a>
+      <!-- Admins also manage tasks -->
+      <a mat-list-item routerLink="/tasks" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>task</mat-icon>
+        <div matListItemTitle>All Tasks</div>
+      </a>
+      <a mat-list-item routerLink="/users" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>people</mat-icon>
+        <div matListItemTitle>Team Management</div>
+      </a>
+    </mat-nav-list>
+
+    <!-- Standard User Links -->
+    <mat-nav-list *ngIf="!isAdmin" class="nav-list">
+      <a mat-list-item routerLink="/tasks" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>assignment</mat-icon>
+        <div matListItemTitle>My Tasks</div>
+      </a>
+    </mat-nav-list>
+
+    <div class="nav-divider"></div>
+
+    <!-- Common Links -->
+    <mat-nav-list class="nav-list">
+      <a mat-list-item routerLink="/profile" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>account_circle</mat-icon>
+        <div matListItemTitle>My Profile</div>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content">
+
+    <mat-toolbar color="primary" class="top-navbar elevation-z2">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="spacer"></span>
+
+      <div class="navbar-logo">
+        <mat-icon class="logo-icon">rocket_launch</mat-icon>
+        <h2>Collab Core Project and Team Management App</h2>
+      </div>
+
+      <span class="spacer"></span>
+      <div class="user-profile">
+        <span>Welcome, {{ userName }}</span>
+        <button mat-icon-button (click)="logout()" title="Logout" color="warn">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+
+    <!-- The Inner Dashboards Render Here! -->
+    <div class="page-container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

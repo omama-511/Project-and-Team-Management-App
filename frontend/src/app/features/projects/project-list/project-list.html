@@ -1,0 +1,72 @@
+<div class="project-list-container">
+  <div class="header">
+    <h1>Projects</h1>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon> Create Project
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="(projects$ | async) || []" class="mat-elevation-z8 project-table">
+    <!-- Title Column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="project-title">{{element.title}}</div>
+        <div class="project-desc">{{element.description}}</div>
+      </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-chip
+          [color]="element.status === 'active' ? 'primary' : (element.status === 'completed' ? 'accent' : 'warn')">
+          {{element.status | titlecase}}
+        </mat-chip>
+      </td>
+    </ng-container>
+
+    <!-- Progress Column -->
+    <ng-container matColumnDef="progress">
+      <th mat-header-cell *matHeaderCellDef> Progress </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="progress-container">
+          <mat-progress-bar mode="determinate" [value]="calculateProgress(element)"></mat-progress-bar>
+          <span class="progress-label">{{calculateProgress(element)}}%</span>
+          <span class="task-counts">{{element.completed_tasks_count || 0}}/{{element.tasks_count || 0}} Tasks</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Creator Column -->
+    <ng-container matColumnDef="creator">
+      <th mat-header-cell *matHeaderCellDef> Created By </th>
+      <td mat-cell *matCellDef="let element"> {{element.creator?.name}} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="viewDetails(element.id)" matTooltip="View Details">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" (click)="openEditDialog(element)" matTooltip="Edit Project">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteProject(element.id)" matTooltip="Delete Project">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <div *ngIf="(projects$ | async)?.length === 0" class="empty-state">
+    <mat-icon>folder_open</mat-icon>
+    <p>No projects found. Create one to get started!</p>
+  </div>
+</div>
