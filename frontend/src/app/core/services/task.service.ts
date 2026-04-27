@@ -7,7 +7,7 @@ import { Task } from '../models/task.model';
 })
 export class TaskService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://127.0.0.1:8000/api/tasks';
+  private apiUrl = 'https://project-and-team-management-app-production.up.railway.app/api';
 
   getTasks() {
     return this.http.get<Task[]>(this.apiUrl);
