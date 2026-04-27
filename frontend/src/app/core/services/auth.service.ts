@@ -7,7 +7,7 @@ import { BehaviorSubject, tap, catchError, of } from 'rxjs';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://127.0.0.1:8000/api';
+  private apiUrl = 'https://project-and-team-management-app-production.up.railway.app/api';
 
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
