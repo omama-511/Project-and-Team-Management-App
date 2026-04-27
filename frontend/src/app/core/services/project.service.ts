@@ -7,7 +7,7 @@ import { Project, ProjectMember } from '../models/project.model';
 })
 export class ProjectService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://127.0.0.1:8000/api/projects';
+  private apiUrl = 'https://project-and-team-management-app-production.up.railway.app/api/projects';
 
   getProjects() {
     return this.http.get<Project[]>(this.apiUrl);
