@@ -15,7 +15,11 @@ return [
     |
     */
 
+ HEAD
     'paths' => ['api/*', 'sanctum/csrf-cookie', '*'],
+
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+ 37604ae (Added email functionality and dashboard)
 
     'allowed_methods' => ['*'],
 

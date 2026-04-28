@@ -3,8 +3,12 @@
   <mat-sidenav #sidenav mode="side" opened class="sidenav elevation-z4">
     <!-- Admin Links -->
     <mat-nav-list *ngIf="isAdmin" class="nav-list">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>insights</mat-icon>
+        <div matListItemTitle>Dashboard</div>
+      </a>
       <a mat-list-item routerLink="/projects" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <mat-icon matListItemIcon>work</mat-icon>
         <div matListItemTitle>Projects</div>
       </a>
       <!-- Admins also manage tasks -->
@@ -20,6 +24,10 @@
 
     <!-- Standard User Links -->
     <mat-nav-list *ngIf="!isAdmin" class="nav-list">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>insights</mat-icon>
+        <div matListItemTitle>Dashboard</div>
+      </a>
       <a mat-list-item routerLink="/tasks" routerLinkActive="active-link">
         <mat-icon matListItemIcon>assignment</mat-icon>
         <div matListItemTitle>My Tasks</div>

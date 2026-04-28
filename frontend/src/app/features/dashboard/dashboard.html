@@ -1,0 +1,39 @@
+<div class="dashboard-container">
+  <div class="header-section">
+    <h1>Project Overview</h1>
+    <p>Welcome back! Here is a summary of your team's progress.</p>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="label">Total Tasks</span>
+      <span class="value">{{ tasks.length }}</span>
+    </div>
+    <div class="stat-card completed">
+      <span class="label">Done</span>
+      <span class="value">{{ statusCounts.completed }}</span>
+    </div>
+    <div class="stat-card active">
+      <span class="label">In Progress</span>
+      <span class="value">{{ statusCounts.in_progress }}</span>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-grid">
+    <div class="chart-container">
+      <h3>Task Status Breakdown</h3>
+      <div class="canvas-wrapper">
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <h3>Team Productivity (Completed)</h3>
+      <div class="canvas-wrapper">
+        <canvas id="productivityChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

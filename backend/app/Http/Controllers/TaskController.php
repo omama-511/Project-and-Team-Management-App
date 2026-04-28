@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\TaskAssignment;
+use App\Models\User;
+use App\Mail\TaskAssigned;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TaskController extends Controller
 {
@@ -39,6 +42,12 @@ class TaskController extends Controller
         
         if (!empty($validated['assignee_ids'])) {
             $task->assignees()->sync($validated['assignee_ids']);
+            
+            // Send emails to all assignees
+            $task->load(['assignees', 'project']);
+            foreach ($task->assignees as $assignee) {
+                Mail::to($assignee->email)->send(new TaskAssigned($task, $assignee));
+            }
         }
 
         return response()->json($task->load('assignees'), 201);
@@ -116,6 +125,11 @@ class TaskController extends Controller
             'task_id' => $taskId,
             'user_id' => $request->user_id
         ]);
+
+        // Send email to the assigned user
+        $task = Task::with('project')->findOrFail($taskId);
+        $user = User::findOrFail($request->user_id);
+        Mail::to($user->email)->send(new TaskAssigned($task, $user));
 
         return response()->json($assignment, 201);
     }

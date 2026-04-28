@@ -4,7 +4,7 @@ import { roleGuard } from './core/guards/role.guard';
 import { guestGuard } from './core/guards/login.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'login', loadComponent: () => import('./auth/login/login').then(m => m.Login), canActivate: [guestGuard] },
   { path: 'register', loadComponent: () => import('./auth/register/register').then(m => m.Register), canActivate: [guestGuard] },
 
@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./shared/components/layout/main-layout/main-layout').then(m => m.MainLayoutComponent),
     canActivate: [authGuard],
     children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent)
+      },
       {
         path: 'projects',
         loadComponent: () => import('./features/projects/project-list/project-list').then(m => m.ProjectList),
