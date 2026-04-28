@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Schedule;
+use Illuminate\Support\Facades\Artisan;
 
 Schedule::command('app:send-task-reminders')->dailyAt('08:00');
 

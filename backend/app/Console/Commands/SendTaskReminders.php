@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Task;
+use App\Mail\TaskReminder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class SendTaskReminders extends Command
 {
@@ -18,14 +21,14 @@ class SendTaskReminders extends Command
     {
         $tomorrow = now()->addDay()->format('Y-m-d');
         
-        $tasks = \App\Models\Task::with('assignees')
+        $tasks = Task::with('assignees')
             ->whereDate('due_date', $tomorrow)
             ->where('status', '!=', 'completed')
             ->get();
 
         foreach ($tasks as $task) {
             foreach ($task->assignees as $user) {
-                \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\TaskReminder($task, $user));
+                Mail::to($user->email)->send(new TaskReminder($task, $user));
             }
         }
 
