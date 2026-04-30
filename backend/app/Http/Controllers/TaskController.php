@@ -45,9 +45,11 @@ class TaskController extends Controller
             
             // Send emails to all assignees
             $task->load(['assignees', 'project']);
-            foreach ($task->assignees as $assignee) {
-                Mail::to($assignee->email)->send(new TaskAssigned($task, $assignee));
-            }
+            defer(function () use ($task) {
+                foreach ($task->assignees as $assignee) {
+                    Mail::to($assignee->email)->send(new TaskAssigned($task, $assignee));
+                }
+            });
         }
 
         return response()->json($task->load('assignees'), 201);
@@ -129,7 +131,9 @@ class TaskController extends Controller
         // Send email to the assigned user
         $task = Task::with('project')->findOrFail($taskId);
         $user = User::findOrFail($request->user_id);
-        Mail::to($user->email)->send(new TaskAssigned($task, $user));
+        defer(function () use ($task, $user) {
+            Mail::to($user->email)->send(new TaskAssigned($task, $user));
+        });
 
         return response()->json($assignment, 201);
     }
