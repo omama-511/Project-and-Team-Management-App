@@ -20,11 +20,16 @@ export class DashboardComponent implements OnInit {
   statusCounts = { pending: 0, in_progress: 0, completed: 0 };
   
   ngOnInit() {
-    this.taskService.getTasks().subscribe(tasks => {
-      this.tasks = tasks;
-      this.calculateStats();
-      if (isPlatformBrowser(this.platformId)) {
-        setTimeout(() => this.renderCharts(), 100);
+    this.taskService.getTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
+        this.calculateStats();
+        if (isPlatformBrowser(this.platformId)) {
+          setTimeout(() => this.renderCharts(), 100);
+        }
+      },
+      error: (err) => {
+        console.error('Dashboard load error', err);
       }
     });
   }
