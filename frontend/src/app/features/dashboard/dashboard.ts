@@ -40,8 +40,15 @@ export class DashboardComponent implements OnInit {
   }
 
   renderCharts() {
+    const statusCanvas = document.getElementById('statusChart') as HTMLCanvasElement;
+    const productivityCanvas = document.getElementById('productivityChart') as HTMLCanvasElement;
+
+    if (!statusCanvas || !productivityCanvas) {
+      return;
+    }
+
     // 1. Status Pie Chart
-    new Chart('statusChart', {
+    new Chart(statusCanvas, {
       type: 'pie',
       data: {
         labels: ['Pending', 'In Progress', 'Completed'],
@@ -66,7 +73,7 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    new Chart('productivityChart', {
+    new Chart(productivityCanvas, {
       type: 'bar',
       data: {
         labels: Object.keys(userStats),

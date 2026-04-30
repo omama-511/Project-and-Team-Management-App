@@ -1,13 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Project, ProjectMember } from '../models/project.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://project-and-team-management-app-production.up.railway.app/api/projects';
+  private apiUrl = `${environment.apiUrl}/projects`;
 
   getProjects() {
     return this.http.get<Project[]>(this.apiUrl);

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '../../../core/services/project.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Project } from '../../../core/models/project.model';
-import { Observable, BehaviorSubject, switchMap, startWith, map } from 'rxjs';
+import { Observable, BehaviorSubject, switchMap, startWith, map, catchError, of, EMPTY } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,7 +44,13 @@ export class ProjectDetail implements OnInit {
   projectId = +(this.route.snapshot.paramMap.get('id') || 0);
   
   project$: Observable<Project | null> = this.refresh$.pipe(
-    switchMap(() => this.projectService.getProject(this.projectId)),
+    switchMap(() => this.projectService.getProject(this.projectId).pipe(
+      catchError(err => {
+        console.error('Error loading project', err);
+        this.goBack();
+        return EMPTY;
+      })
+    )),
     startWith(null)
   );
 

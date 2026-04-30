@@ -31,6 +31,7 @@ export class ProjectCreate implements OnInit {
   
   projectForm!: FormGroup;
   isEditMode = false;
+  isSubmitting = false;
   
   constructor(@Inject(MAT_DIALOG_DATA) public data: { project?: Project }) {
     if (data?.project) {
@@ -47,19 +48,32 @@ export class ProjectCreate implements OnInit {
   }
 
   onSubmit() {
-    if (this.projectForm.invalid) return;
+    if (this.projectForm.invalid || this.isSubmitting) return;
 
+    this.isSubmitting = true;
     const projectData = this.projectForm.value;
 
     if (this.isEditMode && this.data?.project?.id) {
       this.projectService.updateProject(this.data.project.id, projectData).subscribe({
-        next: (res) => this.dialogRef.close(res),
-        error: (err) => console.error('Update failed', err)
+        next: (res) => {
+          this.isSubmitting = false;
+          this.dialogRef.close(res);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Update failed', err);
+        }
       });
     } else {
       this.projectService.createProject(projectData).subscribe({
-        next: (res) => this.dialogRef.close(res),
-        error: (err) => console.error('Create failed', err)
+        next: (res) => {
+          this.isSubmitting = false;
+          this.dialogRef.close(res);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create failed', err);
+        }
       });
     }
   }

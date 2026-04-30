@@ -25,8 +25,8 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" [disabled]="projectForm.invalid" (click)="onSubmit()">
-    {{ isEditMode ? 'Update' : 'Create' }}
+  <button mat-button (click)="onCancel()" [disabled]="isSubmitting">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="projectForm.invalid || isSubmitting" (click)="onSubmit()">
+    {{ isSubmitting ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
   </button>
 </mat-dialog-actions>

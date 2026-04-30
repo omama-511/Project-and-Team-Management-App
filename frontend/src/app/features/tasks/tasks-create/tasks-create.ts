@@ -43,6 +43,7 @@ export class TasksCreate implements OnInit {
   taskForm!: FormGroup;
   isEditMode = false;
   isAdmin = false;
+  isSubmitting = false;
   projects$: Observable<Project[]> = of([]);
   users$: Observable<User[]> = of([]);
 
@@ -77,20 +78,42 @@ export class TasksCreate implements OnInit {
   }
 
   onSubmit() {
-    if (this.taskForm.invalid) return;
+    if (this.taskForm.invalid || this.isSubmitting) return;
+
+    this.isSubmitting = true;
 
     // get raw value to include disabled fields if needed, but we only send what's allowed
     const taskData = this.taskForm.getRawValue();
 
+    if (taskData.due_date) {
+      const d = new Date(taskData.due_date);
+      const year = d.getFullYear();
+      const month = ('0' + (d.getMonth() + 1)).slice(-2);
+      const day = ('0' + d.getDate()).slice(-2);
+      taskData.due_date = `${year}-${month}-${day}`;
+    }
+
     if (this.isEditMode && this.data?.task?.id) {
       this.taskService.updateTask(this.data.task.id, taskData).subscribe({
-        next: (res) => this.dialogRef.close(res),
-        error: (err) => console.error('Update failed', err)
+        next: (res) => {
+          this.isSubmitting = false;
+          this.dialogRef.close(res);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Update failed', err);
+        }
       });
     } else {
       this.taskService.createTask(taskData).subscribe({
-        next: (res) => this.dialogRef.close(res),
-        error: (err) => console.error('Create failed', err)
+        next: (res) => {
+          this.isSubmitting = false;
+          this.dialogRef.close(res);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          console.error('Create failed', err);
+        }
       });
     }
   }
