@@ -46,8 +46,12 @@ class TaskController extends Controller
             // Send emails to all assignees
             $task->load(['assignees', 'project']);
             defer(function () use ($task) {
-                foreach ($task->assignees as $assignee) {
-                    Mail::to($assignee->email)->send(new TaskAssigned($task, $assignee));
+                try {
+                    foreach ($task->assignees as $assignee) {
+                        \Illuminate\Support\Facades\Mail::to($assignee->email)->send(new \App\Mail\TaskAssigned($task, $assignee));
+                    }
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error('Task Assigned Mail failed: ' . $e->getMessage());
                 }
             });
         }
@@ -132,7 +136,11 @@ class TaskController extends Controller
         $task = Task::with('project')->findOrFail($taskId);
         $user = User::findOrFail($request->user_id);
         defer(function () use ($task, $user) {
-            Mail::to($user->email)->send(new TaskAssigned($task, $user));
+            try {
+                \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\TaskAssigned($task, $user));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Task Assigned Mail failed: ' . $e->getMessage());
+            }
         });
 
         return response()->json($assignment, 201);
